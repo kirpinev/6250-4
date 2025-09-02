@@ -181,10 +181,16 @@
         }
 
         .carousel-item img {
-            width: 80px;
-            height: 80px;
+            width: 46px;
+            height: 46px;
             object-fit: contain;
             margin-bottom: 4px;
+        }
+
+        /* Special size for picture carousel icons */
+        .picture-carousel .carousel-item img {
+            width: 80px;
+            height: 80px;
         }
 
         .own-choice-img {
@@ -338,7 +344,7 @@
             <div class="carousel-group">
                 <h3 class="carousel-title">Выберите картинку</h3>
                 <div class="carousel-container">
-                    <div class="carousel" id="pictureCarousel">
+                    <div class="carousel picture-carousel" id="pictureCarousel">
                         <div class="carousel-item selected" data-value="empty">
                             <div class="empty-option">Без картинки</div>
                             <div class="checkmark"></div>
