@@ -199,7 +199,7 @@
             align-items: center;
             justify-content: center;
             background: #f5f5f5;
-            border: 1px solid #ddd;
+            border: none;
             border-radius: 8px;
             font-size: 10px;
             font-weight: 500;
@@ -364,11 +364,7 @@
                             <div class="checkmark"></div>
                         </div>
                         <div class="carousel-item" data-value="donut">
-                            <img src="images/donut.svg" alt="Пончик">
-                            <div class="checkmark"></div>
-                        </div>
-                        <div class="carousel-item" data-value="tape">
-                            <img src="images/tape.png" alt="Лента">
+                            <img src="images/donut.png" alt="Пончик">
                             <div class="checkmark"></div>
                         </div>
                         <div class="carousel-item" data-value="own">
@@ -503,7 +499,6 @@
                 'cookie': 'gingerbread',
                 'slider': 'slider-smile',
                 'donut': 'donut',
-                'tape': 'tape',
                 'own': 'custom'
             };
             
@@ -691,59 +686,7 @@
             });
         }
 
-        // Update sticker preview on iPhone
-        function updateStickerPreview() {
-            const preview = document.getElementById('stickerPreview');
-            
-            // Map UI values to classification values
-            const pictureMap = {
-                'empty': 'empty',
-                'cat': 'cat',
-                'robocat': 'robot-cat',
-                'smile': 'smile-hearts',
-                'cookie': 'gingerbread',
-                'slider': 'slider-smile',
-                'donut': 'donut',
-                'tape': 'tape',
-                'own': 'custom'
-            };
-            
-            const mappedPicture = pictureMap[currentSelections.picture] || 'empty';
-            
-            // Debug logging
-            console.log('Searching for sticker with params:', {
-                picture: mappedPicture,
-                color: currentSelections.color,
-                thickness: currentSelections.thickness,
-                shape: currentSelections.shape
-            });
-            
-            // Find sticker based on all 4 parameters
-            let sticker = findStickerByParams(
-                mappedPicture,
-                currentSelections.color,
-                currentSelections.thickness,
-                currentSelections.shape
-            );
-            
-            // If no exact match, try to find by picture only
-            if (!sticker) {
-                for (let i = 1; i <= 880; i++) {
-                    const classification = getStickerClassification(i);
-                    if (classification && classification.design === mappedPicture) {
-                        sticker = classification;
-                        break;
-                    }
-                }
-            }
-            
-            if (sticker) {
-                preview.innerHTML = `<img src="images/${sticker.filename}" alt="Стикер ${sticker.number}">`;
-                positionSticker(preview, currentSelections.shape);
-            } else {
-                preview.innerHTML = '';
-            }
-        }
+
 
         // Update only sticker position
         function updateStickerPosition() {
