@@ -184,24 +184,14 @@
             right: 4px;
             width: 16px;
             height: 16px;
-            background: #333333;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: url('images/tick.png') no-repeat center;
+            background-size: contain;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
         .carousel-item.selected .checkmark {
             opacity: 1;
-        }
-
-        .carousel-item .checkmark::after {
-            content: '✓';
-            color: #ffffff;
-            font-size: 10px;
-            font-weight: bold;
         }
 
         /* Color items */
@@ -291,20 +281,19 @@
         <!-- Header -->
         <div class="header">
             <button class="back-button" onclick="goBack()">← Назад</button>
-            <h1 class="page-title">Выбор дизайна</h1>
         </div>
 
         <!-- iPhone Section -->
         <div class="iphone-section">
+            <div class="title-section">
+                <h2 class="main-title">Соберите свой уникальный стикер</h2>
+                <p class="subtitle">Теперь вы выбираете свой стиль</p>
+            </div>
+            
             <div class="iphone-container">
                 <div class="iphone">
                     <div class="sticker-preview" id="stickerPreview"></div>
                 </div>
-            </div>
-            
-            <div class="title-section">
-                <h2 class="main-title">Соберите свой уникальный стикер</h2>
-                <p class="subtitle">Теперь вы выбираете свой стиль</p>
             </div>
         </div>
 
@@ -420,8 +409,8 @@
         </div>
 
         <!-- CTA Button -->
-        <button class="cta-button" onclick="selectDesign()">
-            Выбрать дизайн
+        <button class="cta-button" onclick="selectDesign()" id="orderButton">
+            Заказать за 990 ₽
         </button>
     </div>
 
@@ -437,6 +426,13 @@
         // Debug function to log current selections
         function debugSelections() {
             console.log('Current selections:', currentSelections);
+        }
+        
+        // Update order button price based on thickness
+        function updateOrderButton() {
+            const button = document.getElementById('orderButton');
+            const price = currentSelections.thickness === 'thin' ? '990' : '690';
+            button.textContent = `Заказать за ${price} ₽`;
         }
         
         // Simple sticker update without caching
@@ -629,6 +625,9 @@
                         
                         // Always update sticker preview when any parameter changes
                         updateStickerPreview();
+                        
+                        // Update order button price
+                        updateOrderButton();
                     }
                 });
             });
@@ -731,6 +730,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             initCarousels();
             updateStickerPreview();
+            updateOrderButton();
         });
     </script>
 </body>
