@@ -22,7 +22,7 @@ python3 -m http.server 8000
 ```
 
 Затем откройте в браузере:
-- **Главная страница**: http://localhost:8000/
+- **Главная страница** (автоперенаправление): http://localhost:8000/
 - **Информационная страница**: http://localhost:8000/landing.html
 - **Конфигуратор**: http://localhost:8000/designer-advanced.html
 
