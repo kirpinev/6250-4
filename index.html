@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alfa Pay - Стикеры для iPhone</title>
+    <meta name="description" content="Создайте уникальные стикеры для вашего iPhone с Alfa Pay. Выберите дизайн, цвет, толщину и форму.">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            text-align: center;
+            color: white;
+            max-width: 600px;
+            padding: 40px 20px;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn.primary {
+            background: #333;
+            border-color: #333;
+        }
+        
+        .btn.primary:hover {
+            background: #555;
+            border-color: #555;
+        }
+        
+        .features {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 30px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .feature-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎨 Alfa Pay</div>
+        <div class="subtitle">Создайте уникальные стикеры для вашего iPhone</div>
+        
+        <div class="buttons">
+            <a href="landing.html" class="btn primary">Выбрать дизайн</a>
+            <a href="designer-advanced.html" class="btn">Прямо к конфигуратору</a>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🎨</div>
+                <div class="feature-title">6 дизайнов</div>
+                <div class="feature-desc">Кот, робокот, смайл, пряничный человек, слайдер, своя картинка</div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🌈</div>
+                <div class="feature-title">5 цветов</div>
+                <div class="feature-desc">Черный, белый, красный, зеленый, градиент</div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">📏</div>
+                <div class="feature-title">2 толщины</div>
+                <div class="feature-desc">Тонкий и стандартный</div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🔷</div>
+                <div class="feature-title">5 форм</div>
+                <div class="feature-desc">Прямоугольник, квадрат, круг, маленький прямоугольник, с вырезом</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
