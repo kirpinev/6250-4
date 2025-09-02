@@ -97,16 +97,25 @@
         }
 
         .main-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 700;
             color: #000000;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            line-height: 1.3;
         }
 
         .subtitle {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 400;
             color: #666666;
+        }
+
+        .custom-text {
+            text-align: center;
+            font-size: 14px;
+            color: #666666;
+            margin-top: 10px;
+            padding: 0 20px;
         }
 
         /* Carousel Section */
@@ -175,6 +184,28 @@
             width: 46px;
             height: 46px;
             object-fit: contain;
+            margin-bottom: 4px;
+        }
+
+        .own-choice-img {
+            transform: scale(0.5);
+            transform-origin: center;
+        }
+
+        .empty-option {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 500;
+            color: #666;
+            text-align: center;
+            line-height: 1.2;
             margin-bottom: 4px;
         }
 
@@ -295,6 +326,10 @@
                     <div class="sticker-preview" id="stickerPreview"></div>
                 </div>
             </div>
+            
+            <div class="custom-text" id="customText" style="display: none;">
+                Добавить свою картинку вы сможете на следующем шаге
+            </div>
         </div>
 
         <!-- Carousel Section -->
@@ -304,7 +339,11 @@
                 <h3 class="carousel-title">Выберите картинку</h3>
                 <div class="carousel-container">
                     <div class="carousel" id="pictureCarousel">
-                        <div class="carousel-item selected" data-value="cat">
+                        <div class="carousel-item selected" data-value="empty">
+                            <div class="empty-option">Без картинки</div>
+                            <div class="checkmark"></div>
+                        </div>
+                        <div class="carousel-item" data-value="cat">
                             <img src="images/cat.png" alt="Кот">
                             <div class="checkmark"></div>
                         </div>
@@ -324,8 +363,16 @@
                             <img src="images/slider.png" alt="Слайдер">
                             <div class="checkmark"></div>
                         </div>
+                        <div class="carousel-item" data-value="donut">
+                            <img src="images/donut.svg" alt="Пончик">
+                            <div class="checkmark"></div>
+                        </div>
+                        <div class="carousel-item" data-value="tape">
+                            <img src="images/tape.png" alt="Лента">
+                            <div class="checkmark"></div>
+                        </div>
                         <div class="carousel-item" data-value="own">
-                            <img src="images/own choice (cross).png" alt="Своя картинка">
+                            <img src="images/own choice (cross).png" alt="Своя картинка" class="own-choice-img">
                             <div class="checkmark"></div>
                         </div>
                     </div>
@@ -417,7 +464,7 @@
     <script>
         // Current selections
         let currentSelections = {
-            picture: 'cat',
+            picture: 'empty',
             color: 'black',
             thickness: 'thin',
             shape: 'rectangle'
@@ -438,18 +485,29 @@
         // Simple sticker update without caching
         function updateStickerPreview() {
             const preview = document.getElementById('stickerPreview');
+            const customText = document.getElementById('customText');
+            
+            // Show/hide custom text based on selection
+            if (currentSelections.picture === 'own') {
+                customText.style.display = 'block';
+            } else {
+                customText.style.display = 'none';
+            }
             
             // Map UI values to classification values
             const pictureMap = {
+                'empty': 'empty',
                 'cat': 'cat',
                 'robocat': 'robot-cat',
                 'smile': 'smile-hearts',
                 'cookie': 'gingerbread',
                 'slider': 'slider-smile',
+                'donut': 'donut',
+                'tape': 'tape',
                 'own': 'custom'
             };
             
-            const mappedPicture = pictureMap[currentSelections.picture] || 'cat';
+            const mappedPicture = pictureMap[currentSelections.picture] || 'empty';
             
             // Find sticker based on all 4 parameters
             let sticker = findStickerByParams(
@@ -639,15 +697,18 @@
             
             // Map UI values to classification values
             const pictureMap = {
+                'empty': 'empty',
                 'cat': 'cat',
                 'robocat': 'robot-cat',
                 'smile': 'smile-hearts',
                 'cookie': 'gingerbread',
                 'slider': 'slider-smile',
+                'donut': 'donut',
+                'tape': 'tape',
                 'own': 'custom'
             };
             
-            const mappedPicture = pictureMap[currentSelections.picture] || 'cat';
+            const mappedPicture = pictureMap[currentSelections.picture] || 'empty';
             
             // Debug logging
             console.log('Searching for sticker with params:', {
