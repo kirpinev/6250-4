@@ -82,3 +82,4 @@ python3 -m http.server 8000
 - **Размеры**: rectangle, small-rectangle, cutout - по ширине iPhone с отступами 10px
 
 ## 🎉 Готово к использованию!
+# GitHub Pages Deploy Fix
