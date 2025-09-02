@@ -218,6 +218,15 @@
             height: 100px;
         }
 
+        /* Fix vertical scrolling issue for picture carousel */
+        .picture-carousel {
+            overflow-y: hidden;
+        }
+
+        .picture-carousel .carousel-item {
+            align-self: flex-start;
+        }
+
         .own-choice-img {
             transform: scale(0.5);
             transform-origin: center;
