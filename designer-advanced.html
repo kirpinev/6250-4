@@ -6,7 +6,15 @@
     <title>Выбор дизайна стикера - Alfa Pay</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+            @font-face {
+                font-family: 'SF Pro Display';
+                src: url('data:font/woff2;base64,') format('woff2');
+                font-weight: 400;
+                font-style: normal;
+            }
+        </style>
     <style>
         * {
             margin: 0;
@@ -15,7 +23,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: #ffffff;
             color: #000000;
             line-height: 1.6;
@@ -193,6 +201,23 @@
             height: 80px;
         }
 
+        /* Special size for thickness carousel icons */
+        .thickness-carousel .carousel-item img {
+            width: 56px;
+            height: 56px;
+        }
+
+        /* Individual picture icon sizes */
+        .picture-carousel .carousel-item[data-value="cat"] img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .picture-carousel .carousel-item[data-value="donut"] img {
+            width: 100px;
+            height: 100px;
+        }
+
         .own-choice-img {
             transform: scale(0.5);
             transform-origin: center;
@@ -207,12 +232,13 @@
             background: transparent;
             border: none;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             color: #000;
             text-align: center;
-            line-height: 1.2;
+            line-height: 1.1;
             margin-bottom: 4px;
+            font-family: 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         .carousel-item .checkmark {
@@ -346,7 +372,7 @@
                 <div class="carousel-container">
                     <div class="carousel picture-carousel" id="pictureCarousel">
                         <div class="carousel-item selected" data-value="empty">
-                            <div class="empty-option">Без картинки</div>
+                            <div class="empty-option">Без<br>картинки</div>
                             <div class="checkmark"></div>
                         </div>
                         <div class="carousel-item" data-value="cat">
@@ -414,7 +440,7 @@
             <div class="carousel-group">
                 <h3 class="carousel-title">Тонкий или стандартный</h3>
                 <div class="carousel-container">
-                    <div class="carousel" id="thicknessCarousel">
+                    <div class="carousel thickness-carousel" id="thicknessCarousel">
                         <div class="carousel-item selected" data-value="thin">
                             <img src="images/thin.png" alt="Тонкий">
                             <div class="checkmark"></div>
