@@ -805,8 +805,7 @@
             const variant = getVariantNumber();
             const price = getPrice(variant, currentSelections.thickness);
             
-            // Специальная логика для картинок в вариантах 4-6
-            let pictureName;
+            
             if (currentSelections.shape === 'dzen') {
                 pictureName = 'Дзынь стикер';
             } else if (currentSelections.shape === 'potato') {
@@ -820,8 +819,8 @@
                 variant: variant,
                 thickness: currentSelections.thickness === 'thin' ? 'thin' : 'thick',
                 shape: getShapeName(currentSelections.shape || 'small-rectangle'),
-                color: getColorName(currentSelections.color || 'red'),
-                picture: pictureName,
+                color: 'Нет выбора',
+                picture: 'Нет выбора',
                 price: price
             };
         }
@@ -1017,8 +1016,7 @@
             const variant = getVariantNumber();
             const price = getPrice(variant, currentSelections.thickness);
             
-            // Специальная логика для картинок в вариантах 4-6
-            let pictureName;
+            
             if (currentSelections.shape === 'dzen') {
                 pictureName = 'Дзынь стикер';
             } else if (currentSelections.shape === 'potato') {
@@ -1032,8 +1030,8 @@
                 variant: variant,
                 thickness: currentSelections.thickness === 'thin' ? 'thin' : 'thick',
                 shape: getShapeName(currentSelections.shape || 'small-rectangle'),
-                color: getColorName(currentSelections.color || 'red'),
-                picture: pictureName,
+                color: 'Нет выбора',
+                picture: 'Нет выбора',
                 price: price
             };
         }
