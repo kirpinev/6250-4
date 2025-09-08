@@ -738,20 +738,9 @@
         }
 
         function selectDesign() {
-            const sticker = findStickerByParams(
-                currentSelections.picture,
-                currentSelections.color,
-                currentSelections.thickness,
-                currentSelections.shape
-            );
-            
-            if (sticker) {
-                alert(`Выбран стикер №${sticker.number}: ${sticker.design} ${sticker.color} ${sticker.shape} ${sticker.thickness}`);
-            } else {
-                alert('Стикер с такими параметрами не найден');
-            }
+            // Перенаправляем на страницу-заглушку
+            window.location.href = 'thank-you.html';
         }
-
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
             initCarousels();
