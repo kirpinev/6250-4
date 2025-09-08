@@ -819,10 +819,13 @@
         }
 
         // Функция для отправки данных в Google Таблицу
+        // Функция для отправки данных в Google Таблицу
         async function sendDataToGoogleSheets(data) {
             try {
                 // Замените на ваш URL Google Apps Script
                 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwh6CbdDs_s9B2ndByyvZ8kxPXemOgoUNG2CfO9r6ITaDRdLb4iDkBEdyaDf8rJ5hD2/exec';
+                
+                console.log('Отправляем данные:', data);
                 
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
@@ -832,21 +835,33 @@
                     body: JSON.stringify(data)
                 });
                 
+                console.log('Ответ сервера:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const result = await response.json();
+                console.log('Результат:', result);
                 
                 if (result.success) {
                     console.log('Данные успешно отправлены в Google Таблицу');
+                    if (result.spreadsheetUrl) {
+                        console.log('Ссылка на таблицу:', result.spreadsheetUrl);
+                    }
                     return true;
                 } else {
                     console.error('Ошибка при отправке данных:', result.error);
+                    console.error('Сообщение:', result.message);
                     return false;
                 }
             } catch (error) {
                 console.error('Ошибка при отправке данных:', error);
+                console.error('Тип ошибки:', error.name);
+                console.error('Сообщение ошибки:', error.message);
                 return false;
             }
         }
-
         document.addEventListener('DOMContentLoaded', () => {
             initCarousels();
             toggleThinButton(); // Проверить состояние кнопок при загрузке
