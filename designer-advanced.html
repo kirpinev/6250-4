@@ -419,6 +419,14 @@
                             <img src="images/cut.png" alt="С вырезом">
                             <div class="checkmark"></div>
                         </div>
+                        <div class="carousel-item" data-value="dzen">
+                            <img src="images/дзынь стикер.png" alt="Дзынь стикер">
+                            <div class="checkmark"></div>
+                        </div>
+                        <div class="carousel-item" data-value="potato">
+                            <img src="images/картошка.png" alt="Картошка">
+                            <div class="checkmark"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -476,6 +484,16 @@
             };
             
             const mappedPicture = pictureMap[currentSelections.picture] || 'empty';
+            
+            // Special handling for new shapes (dzen, potato) - only thick
+            if (currentSelections.shape === 'dzen' || currentSelections.shape === 'potato') {
+                // For new shapes, show the corresponding image directly
+                const imageName = currentSelections.shape === 'dzen' ? 'дзынь стикер.png' : 'картошка.png';
+                const imageSrc = `images/${imageName}`;
+                preview.innerHTML = `<img src="${imageSrc}" alt="${currentSelections.shape}" style="width: 100%; height: 100%; object-fit: contain;">`;
+                positionSticker(preview, currentSelections.shape);
+                return;
+            }
             
             // Find sticker based on all 4 parameters
             let sticker = findStickerByParams(
@@ -643,13 +661,40 @@
                         siblings.forEach(sibling => sibling.classList.remove('selected'));
                         item.classList.add('selected');
                         currentSelections.shape = item.dataset.value;
+                        
+                        // Скрыть/показать кнопку "тонкий" для новых форм
+                        toggleThinButton();
+                        
                         updateStickerPreview();
                     }
                 });
             }
         }
 
-
+        // Toggle thin button visibility based on selected shape
+        function toggleThinButton() {
+            const thicknessCarousel = document.getElementById('thicknessCarousel');
+            const thinButton = thicknessCarousel.querySelector('[data-value="thin"]');
+            const thickButton = thicknessCarousel.querySelector('[data-value="thick"]');
+            
+            // Новые формы только толстые
+            const thickOnlyShapes = ['dzen', 'potato'];
+            
+            if (thickOnlyShapes.includes(currentSelections.shape)) {
+                // Скрыть кнопку "тонкий" и выбрать "толстый"
+                if (thinButton) thinButton.style.display = 'none';
+                if (thickButton) {
+                    thickButton.style.display = 'flex';
+                    thickButton.classList.add('selected');
+                    thinButton?.classList.remove('selected');
+                    currentSelections.thickness = 'thick';
+                }
+            } else {
+                // Показать обе кнопки
+                if (thinButton) thinButton.style.display = 'flex';
+                if (thickButton) thickButton.style.display = 'flex';
+            }
+        }
 
         // Update only sticker position
         function updateStickerPosition() {
@@ -666,7 +711,9 @@
                 'square': { top: '75%', left: '50%', transform: 'translate(-50%, -50%)', width: '100px', height: '100px' },
                 'circle': { top: '75%', left: '50%', transform: 'translate(-50%, -50%)', width: '100px', height: '100px' },
                 'small-rectangle': { top: '15%', left: '75%', transform: 'translate(-50%, -50%)', width: '300px', height: '80px' },
-                'cutout': { top: '80%', left: '50%', transform: 'translate(-50%, -50%)', width: '350px', height: '110px' }
+                'cutout': { top: '80%', left: '50%', transform: 'translate(-50%, -50%)', width: '350px', height: '110px' },
+                'dzen': { top: '75%', left: '50%', transform: 'translate(-50%, -50%)', width: '200px', height: '200px' },
+                'potato': { top: '75%', left: '50%', transform: 'translate(-50%, -50%)', width: '180px', height: '120px' }
             };
             
             const position = positions[shape] || positions['rectangle'];
@@ -696,6 +743,7 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
             initCarousels();
+            toggleThinButton(); // Проверить состояние кнопок при загрузке
             updateStickerPreview();
             updateOrderButton();
         });
