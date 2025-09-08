@@ -104,6 +104,13 @@
             line-height: 1.5;
         }
 
+        /* Spacer block - invisible but takes space */
+        .info-card.spacer {
+            background: #ffffff;
+            box-shadow: none;
+            border: none;
+        }
+
         /* CTA Button */
         .cta-button {
             position: fixed;
@@ -185,7 +192,9 @@
                 <p class="info-card-description">до 100% рублями и до 50% — милями</p>
             </div>
 
-            <div class="info-card">
+            <div class="info-card spacer">
+            </div>
+        </section>
 
         <!-- CTA Button -->
         <button class="cta-button" onclick="goToDesigner()">
