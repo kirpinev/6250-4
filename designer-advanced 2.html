@@ -7,6 +7,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
         <style>
             /* Убран пустой @font-face */
         </style>
@@ -41,6 +44,16 @@
             position: relative;
         }
 
+        .back-button {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #666666;
+            cursor: pointer;
+        }
 
         .page-title {
             font-size: 20px;
@@ -306,6 +319,7 @@
             padding: 16px 24px;
             font-size: 16px;
             font-weight: 600;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin: 20px 0 40px;
@@ -371,6 +385,7 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
+            <button class="back-button" onclick="goBack()">← Назад</button>
         </div>
 
         <!-- iPhone Section -->
@@ -393,7 +408,6 @@
 
         <!-- Carousel Section -->
         <div class="carousel-section">
-
 
             <!-- Thickness Selection -->
             <div class="carousel-group">
@@ -474,8 +488,85 @@
             console.log('Current selections:', currentSelections);
         }
         
-        // Update order button price - fixed price for 6250-4
-        function updateOrderButton() {
+        // Update order button price
+        function getVariantNumber() {
+            return 4;
+        }
+        function getPrice(variant, thickness) {
+            const prices = {
+                4: '199',
+                5: '299', 
+                6: '499',
+                7: '199',
+                8: '299',
+                9: '499'
+            };
+            return prices[variant] || '199';
+        }
+        function collectUserData() {
+            const variant = getVariantNumber();
+            
+            return {
+                timestamp: new Date().toISOString(),
+                variant: variant,
+                thickness: currentSelections.thickness === 'thin' ? 'thin' : 'thick',
+                shape: currentSelections.shape || 'rectangle',
+                color: 'Нет выбора',
+                picture: 'Нет выбора',
+                price: getPrice(variant, currentSelections.thickness || 'thick')
+            };
+        }
+        function initCarousels() {
+            const thicknessCarousel = document.getElementById('thicknessCarousel');
+            const shapeCarousel = document.getElementById('shapeCarousel');
+            
+            if (thicknessCarousel) {
+                thicknessCarousel.addEventListener('click', (e) => {
+                    const item = e.target.closest('.carousel-item');
+                    if (item) {
+                        // Remove selection from siblings
+                        const siblings = thicknessCarousel.querySelectorAll('.carousel-item');
+                        siblings.forEach(sibling => sibling.classList.remove('selected'));
+                        
+                        // Add selection to clicked item
+                        item.classList.add('selected');
+                        
+                        // Update current selection
+                        const value = item.dataset.value;
+                        currentSelections.thickness = value;
+                        
+                        console.log('Thickness selected:', value);
+                        
+                        // Update sticker preview and button
+                        updateStickerPreview();
+                        updateOrderButton();
+                    }
+        });
+        if (shapeCarousel) {
+                shapeCarousel.addEventListener('click', (e) => {
+                    const item = e.target.closest('.carousel-item');
+                    if (item) {
+                        // Remove selection from siblings
+                        const siblings = shapeCarousel.querySelectorAll('.carousel-item');
+                        siblings.forEach(sibling => sibling.classList.remove('selected'));
+                        
+                        // Add selection to clicked item
+                        item.classList.add('selected');
+                        
+                        // Update current selection
+                        const value = item.dataset.value;
+                        currentSelections.shape = value;
+                        
+                        console.log('Shape selected:', value);
+                        
+                        // Update sticker preview and button
+                        updateStickerPreview();
+                        updateOrderButton();
+                    }
+        }
+        }
+
+                function updateOrderButton() {
             const button = document.getElementById('orderButton');
             button.textContent = `Заказать за 199 ₽`;
         }
@@ -533,9 +624,8 @@
                         break;
                     }
                 }
-            }
-            
-            if (sticker) {
+        });
+        if (sticker) {
                 const imageSrc = `images/${sticker.filename}`;
                 preview.innerHTML = `<img src="${imageSrc}" alt="Стикер ${sticker.number}" style="width: 100%; height: 100%; object-fit: contain;">`;
                 positionSticker(preview, currentSelections.shape);
@@ -619,9 +709,8 @@
             // Debug logging for position 10
             if (position === 10) {
                 console.log(`Sticker ${stickerNumber}: decade=${decade}, position=${position}, shapeThickness=`, shapeThickness);
-            }
-            
-            if (!designColor || !shapeThickness) {
+        });
+        if (!designColor || !shapeThickness) {
                 console.log(`Missing data for sticker ${stickerNumber}: decade=${decade}, position=${position}`);
                 return null;
             }
@@ -654,69 +743,49 @@
             console.log('No exact match found');
             return null;
         }
-
-        // Initialize carousels - 6250-4: only thickness and shape
-        function initCarousels() {
-            const thicknessCarousel = document.getElementById('thicknessCarousel');
-            const shapeCarousel = document.getElementById('shapeCarousel');
-            
-            if (thicknessCarousel) {
-                thicknessCarousel.addEventListener('click', (e) => {
-                    const item = e.target.closest('.carousel-item');
-                    if (item) {
-                        const siblings = thicknessCarousel.querySelectorAll('.carousel-item');
-                        siblings.forEach(sibling => sibling.classList.remove('selected'));
-                        item.classList.add('selected');
-                        currentSelections.thickness = item.dataset.value;
-                        updateStickerPreview();
-                        updateOrderButton();
-                    }
-                });
-            }
-            
-            if (shapeCarousel) {
+        });
+        if (shapeCarousel) {
                 shapeCarousel.addEventListener('click', (e) => {
                     const item = e.target.closest('.carousel-item');
                     if (item) {
+                        // Remove selection from siblings
                         const siblings = shapeCarousel.querySelectorAll('.carousel-item');
                         siblings.forEach(sibling => sibling.classList.remove('selected'));
-                        item.classList.add('selected');
-                        currentSelections.shape = item.dataset.value;
                         
-                        // Скрыть/показать кнопку "тонкий" для новых форм
-                        toggleThinButton();
+                        // Add selection to clicked item
+                        item.classList.add('selected');
+                        
+                        // Update current selection
+                        const value = item.dataset.value;
+                        currentSelections.shape = value;
+                        
+                        console.log('Shape selected:', value);
+                        
+                        // Update sticker preview and button
+
+                        // Специальная логика для картошки и дзынь стикера - скрываем тонкий вариант
+                        const thickButton = document.querySelector('[data-value="bold"]');
+                        const thinButton = document.querySelector('[data-value="thin"]');
+                        
+                        if (value === 'potato' || value === 'dzen') {
+                            // Для картошки и дзынь стикера скрываем тонкий вариант
+                            if (thinButton) thinButton.style.display = 'none';
+                            if (thickButton) thickButton.style.display = 'flex';
+                            // Автоматически выбираем толстый вариант
+                            currentSelections.thickness = 'bold';
+                            if (thickButton) thickButton.classList.add('selected');
+                            if (thinButton) thinButton.classList.remove('selected');
+                        } else {
+                            // Для других форм показываем оба варианта
+                            if (thickButton) thickButton.style.display = 'flex';
+                            if (thinButton) thinButton.style.display = 'flex';
+                        }
                         
                         updateStickerPreview();
+                        updateOrderButton();
                     }
-                });
-            }
         }
-
-        // Toggle thin button visibility based on selected shape
-        function toggleThinButton() {
-            const thicknessCarousel = document.getElementById('thicknessCarousel');
-            const thinButton = thicknessCarousel.querySelector('[data-value="thin"]');
-            const thickButton = thicknessCarousel.querySelector('[data-value="thick"]');
-            
-            // Новые формы только толстые
-            const thickOnlyShapes = ['dzen', 'potato'];
-            
-            if (thickOnlyShapes.includes(currentSelections.shape)) {
-                // Скрыть кнопку "тонкий" и выбрать "толстый"
-                if (thinButton) thinButton.style.display = 'none';
-                if (thickButton) {
-                    thickButton.style.display = 'flex';
-                    thickButton.classList.add('selected');
-                    thinButton?.classList.remove('selected');
-                    currentSelections.thickness = 'thick';
-                }
-            } else {
-                // Показать обе кнопки
-                if (thinButton) thinButton.style.display = 'flex';
-                if (thickButton) thickButton.style.display = 'flex';
-            }
         }
-
         // Update only sticker position
         function updateStickerPosition() {
             const preview = document.getElementById('stickerPreview');
@@ -745,425 +814,46 @@
         function goBack() {
             window.location.href = 'landing.html';
         }
-
-        // Функция для получения названия формы по значению
-        function getShapeName(shapeValue) {
-            const shapeNames = {
-                'rectangle': 'Прямоугольник',
-                'square': 'Квадрат', 
-                'circle': 'Круг',
-                'small-rectangle': 'Маленький прямоугольник',
-                'cutout': 'С вырезом',
-                'dzen': 'Дзынь стикер',
-                'potato': 'Картошка'
-            };
-            return shapeNames[shapeValue] || shapeValue;
-        }
-
-        // Функция для получения названия цвета по значению
-        function getColorName(colorValue) {
-            const colorNames = {
-                'red': 'Красный',
-                'green': 'Зеленый',
-                'gradient': 'Градиент',
-                'white': 'Белый',
-                'black': 'Черный'
-            };
-            return colorNames[colorValue] || colorValue;
-        }
-
-        // Функция для получения названия картинки по значению
-        function getPictureName(pictureValue) {
-            const pictureNames = {
-                'empty': 'Пустой',
-                'cat': 'Кот',
-                'slider-smile': 'Слайдер-смайл',
-                'robot-cat': 'Робокот',
-                'heart-smile': 'Смайл с сердцами',
-                'custom': 'Свой вариант',
-                'gingerbread': 'Пряничный человек',
-                'donut': 'Пончик',
-                'tape': 'Лента'
-            };
-            return pictureNames[pictureValue] || pictureValue;
-        }
-
-        // Функция для получения цены в зависимости от варианта и толщины
-        function getPrice(variant, thickness) {
-            const prices = {
-                1: 199,
-                2: 299,
-                3: 499,
-                4: 199,
-                5: 299,
-                6: 499,
-                7: 199,
-                8: 299,
-                9: 499,
-                10: thickness === 'thin' ? 990 : 690
-            };
-            return prices[variant] || 0;
-        }
-
-        // Функция для получения номера варианта
-        
-
-        // Функция для сбора всех данных пользователя
-        
-        // Функция для получения номера варианта
-        function getVariantNumber() {
-            return 4;
-        }
-        
-        
-        // Функция для сбора данных пользователя
-        function collectUserData() {
-            const variant = getVariantNumber();
-            const price = getPrice(variant, currentSelections.thickness);
-            
-            
-            if (currentSelections.shape === 'dzen') {
-                pictureName = 'Дзынь стикер';
-            } else if (currentSelections.shape === 'potato') {
-                pictureName = 'Картошка';
-            } else {
-                pictureName = getPictureName(currentSelections.picture || 'cat');
-            }
-            
-            return {
-                timestamp: new Date().toISOString(),
-                variant: variant,
-                thickness: currentSelections.thickness === 'thin' ? 'thin' : 'thick',
-                shape: getShapeName(currentSelections.shape || 'small-rectangle'),
-                color: 'Нет выбора',
-                picture: 'Нет выбора',
-                price: price
-            };
-        }
-
-        // Функция для отправки данных в Google Таблицу
-        // Функция для отправки данных в Google Таблицу
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            initCarousels();
-            toggleThinButton(); // Проверить состояние кнопок при загрузке
-            updateStickerPreview();
-            updateOrderButton();
-        });
-    
-        // Функция для отправки данных через JSONP (обход CORS)
-        function sendDataToGoogleSheets(data) {
-            return new Promise((resolve, reject) => {
-                try {
-                    console.log('Отправляем данные через JSONP:', data);
-                    
-                    // Создаем уникальное имя функции для JSONP
-                    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-                    
-                    // Создаем глобальную функцию для обработки ответа
-                    window[callbackName] = function(response) {
-                        // Удаляем функцию после использования
-                        delete window[callbackName];
-                        if (document.getElementById('jsonp_script')) {
-                            document.head.removeChild(document.getElementById('jsonp_script'));
-                        }
-                        
-                        if (response.success) {
-                            console.log('Данные успешно отправлены в Google Таблицу');
-                            resolve(true);
-                        } else {
-                            console.error('Ошибка при отправке данных:', response.error);
-                            reject(new Error(response.error));
-                        }
-                    };
-                    
-                    // Создаем script тег для JSONP запроса
-                    const script = document.createElement('script');
-                    script.id = 'jsonp_script';
-                    
-                    // URL Google Apps Script с параметрами
-                    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxenb1I-6wje2xrnrbHsfbYpyxxEJ65zodB2Gqhfek6rcb0A_IAyM-VsbGa08o3tc9M/exec';
-                    const params = new URLSearchParams({
-                        callback: callbackName,
-                        data: JSON.stringify(data)
-                    });
-                    
-                    script.src = GOOGLE_SCRIPT_URL + '?' + params.toString();
-                    script.onerror = function() {
-                        delete window[callbackName];
-                        if (document.getElementById('jsonp_script')) {
-                            document.head.removeChild(document.getElementById('jsonp_script'));
-                        }
-                        reject(new Error('Ошибка загрузки JSONP скрипта'));
-                    };
-                    
-                    document.head.appendChild(script);
-                    
-                } catch (error) {
-                    console.error('Ошибка при создании JSONP запроса:', error);
-                    reject(error);
-                }
-            });
-        }
-
-        // Функция для получения названия формы
-        function getShapeName(shape) {
-            const shapeNames = {
-                'small-rectangle': 'Маленький прямоугольник',
-                'square': 'Квадрат',
-                'rectangle': 'Прямоугольник',
-                'cutout': 'С вырезом',
-                'circle': 'Круг',
-                'dzen': 'Дзынь стикер',
-                'potato': 'Картошка'
-            };
-            return shapeNames[shape] || shape;
-        }
-
-        // Функция для получения названия цвета
-        function getColorName(color) {
-            const colorNames = {
-                'red': 'Красный',
-                'green': 'Зеленый',
-                'gradient': 'Градиент',
-                'white': 'Белый',
-                'black': 'Черный'
-            };
-            return colorNames[color] || color;
-        }
-
-        // Функция для получения названия картинки
-        function getPictureName(picture) {
-            const pictureNames = {
-                'empty': 'Пустой',
-                'cat': 'Кот',
-                'slider-smile': 'Слайдер-смайл',
-                'robot-cat': 'Робокот',
-                'heart-smile': 'Смайл с сердцами',
-                'custom': 'Своя картинка',
-                'gingerbread': 'Пряничный человек',
-                'donut': 'Пончик',
-                'ribbon': 'Лента'
-            };
-            return pictureNames[picture] || picture;
-        }
-
-        // Функция для получения цены
-        function getPrice(variant, thickness) {
-            const prices = {
-                1: 199, 4: 199, 7: 199,
-                2: 299, 5: 299, 8: 299,
-                3: 499, 6: 499, 9: 499,
-                10: thickness === 'thin' ? 990 : 690
-            };
-            return prices[variant] || 199;
-        }
-
-        // Функция для получения номера варианта
-        
-
-        // Функция для сбора данных пользователя
-        
-        // Функция для сбора данных пользователя
-        
-
-        // Функция для обработки выбора дизайна
-        
-        // Функция для получения номера варианта
-        function getVariantNumber() {
-            return 4;
-        }
-
-        // Функция для получения названия формы
-        function getShapeName(shape) {
-            const shapeNames = {
-                'small-rectangle': 'Маленький прямоугольник',
-                'square': 'Квадрат',
-                'rectangle': 'Прямоугольник',
-                'cutout': 'С вырезом',
-                'circle': 'Круг',
-                'dzen': 'Дзынь стикер',
-                'potato': 'Картошка'
-            };
-            return shapeNames[shape] || shape;
-        }
-
-        // Функция для получения названия цвета
-        function getColorName(color) {
-            const colorNames = {
-                'red': 'Красный',
-                'green': 'Зеленый',
-                'gradient': 'Градиент',
-                'white': 'Белый',
-                'black': 'Черный'
-            };
-            return colorNames[color] || color;
-        }
-
-        // Функция для получения названия картинки
-        function getPictureName(picture) {
-            const pictureNames = {
-                'empty': 'Пустой',
-                'cat': 'Кот',
-                'slider-smile': 'Слайдер-смайл',
-                'robot-cat': 'Робокот',
-                'heart-smile': 'Смайл с сердцами',
-                'custom': 'Своя картинка',
-                'gingerbread': 'Пряничный человек',
-                'donut': 'Пончик',
-                'ribbon': 'Лента'
-            };
-            return pictureNames[picture] || picture;
-        }
-
-        // Функция для получения цены
-        function getPrice(variant, thickness) {
-            const prices = {
-                1: 199, 4: 199, 7: 199,
-                2: 299, 5: 299, 8: 299,
-                3: 499, 6: 499, 9: 499,
-                10: thickness === 'thin' ? 990 : 690
-            };
-            return prices[variant] || 199;
-        }
-
-        // Функция для сбора данных пользователя
-        function collectUserData() {
-            const variant = getVariantNumber();
-            const price = getPrice(variant, currentSelections.thickness);
-            
-            
-            if (currentSelections.shape === 'dzen') {
-                pictureName = 'Дзынь стикер';
-            } else if (currentSelections.shape === 'potato') {
-                pictureName = 'Картошка';
-            } else {
-                pictureName = getPictureName(currentSelections.picture || 'cat');
-            }
-            
-            return {
-                timestamp: new Date().toISOString(),
-                variant: variant,
-                thickness: currentSelections.thickness === 'thin' ? 'thin' : 'thick',
-                shape: getShapeName(currentSelections.shape || 'small-rectangle'),
-                color: 'Нет выбора',
-                picture: 'Нет выбора',
-                price: price
-            };
-        }
-
-        // Функция для отправки данных через JSONP (обход CORS)
-        function sendDataToGoogleSheets(data) {
-            return new Promise((resolve, reject) => {
-                try {
-                    console.log('Отправляем данные через JSONP:', data);
-                    
-                    // Создаем уникальное имя функции для JSONP
-                    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-                    
-                    // Создаем глобальную функцию для обработки ответа
-                    window[callbackName] = function(response) {
-                        // Удаляем функцию после использования
-                        delete window[callbackName];
-                        if (document.getElementById('jsonp_script')) {
-                            document.head.removeChild(document.getElementById('jsonp_script'));
-                        }
-                        
-                        if (response.success) {
-                            console.log('Данные успешно отправлены в Google Таблицу');
-                            resolve(true);
-                        } else {
-                            console.error('Ошибка при отправке данных:', response.error);
-                            reject(new Error(response.error));
-                        }
-                    };
-                    
-                    // Создаем script тег для JSONP запроса
-                    const script = document.createElement('script');
-                    script.id = 'jsonp_script';
-                    
-                    // URL Google Apps Script с параметрами
-                    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxenb1I-6wje2xrnrbHsfbYpyxxEJ65zodB2Gqhfek6rcb0A_IAyM-VsbGa08o3tc9M/exec';
-                    const params = new URLSearchParams({
-                        callback: callbackName,
-                        data: JSON.stringify(data)
-                    });
-                    
-                    script.src = GOOGLE_SCRIPT_URL + '?' + params.toString();
-                    script.onerror = function() {
-                        delete window[callbackName];
-                        if (document.getElementById('jsonp_script')) {
-                            document.head.removeChild(document.getElementById('jsonp_script'));
-                        }
-                        reject(new Error('Ошибка загрузки JSONP скрипта'));
-                    };
-                    
-                    document.head.appendChild(script);
-                    
-                } catch (error) {
-                    console.error('Ошибка при создании JSONP запроса:', error);
-                    reject(error);
-                }
-            });
-        }
-        
         
         // Функция для обработки выбора дизайна с защитой от повторных нажатий
         async function selectDesign() {
-            // Проверяем, не обрабатывается ли уже заказ
             if (isOrderProcessing) {
                 console.log('Заказ уже обрабатывается, повторное нажатие игнорируется');
                 return;
             }
             
-            // Блокируем кнопку и устанавливаем флаг обработки
             isOrderProcessing = true;
             const orderButton = document.getElementById('orderButton');
-            const originalText = orderButton.textContent;
             
             try {
                 console.log('Начинаем процесс заказа...');
-                
-                // Обновляем текст кнопки
-                // orderButton.textContent = 'Обрабатываем заказ...';
                 orderButton.disabled = true;
-                orderButton.style.opacity = '0.6';
+                orderButton.style.backgroundColor = '#898991';
                 orderButton.style.cursor = 'not-allowed';
                 
-                // Собираем данные пользователя
                 const userData = collectUserData();
-                console.log('Собранные данные:', userData);
-                
-                // Отправляем данные в Google Таблицу
                 const success = await sendDataToGoogleSheets(userData);
                 
                 if (success) {
-                    console.log('Данные успешно отправлены, перенаправляем на страницу благодарности');
-                    // Обновляем текст кнопки перед перенаправлением
-                    // orderButton.textContent = 'Заказ принят!';
-                    // Небольшая задержка для показа пользователю
-                    setTimeout(() => {
-                        window.location.href = 'thank-you.html';
-                    }, 1000);
+                    console.log('Данные успешно отправлены, перенаправляем...');
+                    window.location.href = 'thank-you.html';
                 } else {
-                    console.error('Ошибка при отправке данных, но заказ принят');
-                    // Обновляем текст кнопки
-                    // orderButton.textContent = 'Заказ принят!';
-                    // Небольшая задержка для показа пользователю
-                    setTimeout(() => {
-                        window.location.href = 'thank-you.html';
-                    }, 1000);
+                    console.error('Произошла ошибка при сохранении данных, но заказ принят!');
+                    window.location.href = 'thank-you.html';
                 }
             } catch (error) {
-                console.error('Ошибка при обработке заказа:', error);
-                // В случае ошибки все равно перенаправляем на страницу благодарности
-                // orderButton.textContent = 'Заказ принят!';
-                setTimeout(() => {
-                    window.location.href = 'thank-you.html';
-                }, 1000);
+                console.error('Ошибка в процессе заказа:', error);
+                window.location.href = 'thank-you.html';
             }
             // Не сбрасываем флаг isOrderProcessing, чтобы кнопка оставалась заблокированной
         }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initCarousels();
+            updateStickerPreview();
+            updateOrderButton();
+        });
     </script>
 
     <script>
@@ -1182,9 +872,9 @@
                 orderBtn.addEventListener('click', function() {
                     gtag('event', '6250_click_buy_var4');
                     ym(96171108, 'reachGoal', '6250_click_buy_var4');
+        }
                 });
-            }
-        });
+});
     </script>
 </body>
 </html>
