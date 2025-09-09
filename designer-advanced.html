@@ -1136,7 +1136,7 @@
                 console.log('Начинаем процесс заказа...');
                 
                 // Обновляем текст кнопки
-                orderButton.textContent = 'Обрабатываем заказ...';
+                // orderButton.textContent = 'Обрабатываем заказ...';
                 orderButton.disabled = true;
                 orderButton.style.opacity = '0.6';
                 orderButton.style.cursor = 'not-allowed';
@@ -1151,7 +1151,7 @@
                 if (success) {
                     console.log('Данные успешно отправлены, перенаправляем на страницу благодарности');
                     // Обновляем текст кнопки перед перенаправлением
-                    orderButton.textContent = 'Заказ принят!';
+                    // orderButton.textContent = 'Заказ принят!';
                     // Небольшая задержка для показа пользователю
                     setTimeout(() => {
                         window.location.href = 'thank-you.html';
@@ -1159,7 +1159,7 @@
                 } else {
                     console.error('Ошибка при отправке данных, но заказ принят');
                     // Обновляем текст кнопки
-                    orderButton.textContent = 'Заказ принят!';
+                    // orderButton.textContent = 'Заказ принят!';
                     // Небольшая задержка для показа пользователю
                     setTimeout(() => {
                         window.location.href = 'thank-you.html';
@@ -1168,7 +1168,7 @@
             } catch (error) {
                 console.error('Ошибка при обработке заказа:', error);
                 // В случае ошибки все равно перенаправляем на страницу благодарности
-                orderButton.textContent = 'Заказ принят!';
+                // orderButton.textContent = 'Заказ принят!';
                 setTimeout(() => {
                     window.location.href = 'thank-you.html';
                 }, 1000);
